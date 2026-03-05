@@ -1,7 +1,8 @@
 #include "native.h"
 #include <cstdarg>
+#include "src/caju.h"
 
-Caju caju = new Caju();
+Caju* caju = new Caju();
 
 extern "C" {
 

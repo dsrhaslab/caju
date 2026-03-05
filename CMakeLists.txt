@@ -21,6 +21,7 @@ endif ()
 add_library(${CMAKE_PROJECT_NAME} SHARED
     src/interface/native/native.cpp
     src/interface/native/posix_interface.cpp
+    src/caju.cpp
 )
 
 # find_package(
