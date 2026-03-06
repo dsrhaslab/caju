@@ -1,7 +1,7 @@
 #include "native.h"
 #include "spdlog/spdlog.h"
-#include "src/caju.h"
-#include "src/logger/logger.h"
+#include "caju/caju.h"
+#include "caju/logger/logger.h"
 #include <cstdarg>
 #include <spdlog/common.h>
 

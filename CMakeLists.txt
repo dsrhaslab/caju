@@ -23,10 +23,10 @@ endif ()
 add_compile_definitions(SPDLOG_ACTIVE_LEVEL=${SPDLOG_ACTIVE_LEVEL})
 
 add_library(${CMAKE_PROJECT_NAME} SHARED
-    src/interface/native/native.cpp
-    src/interface/native/posix_interface.cpp
-    src/logger/logger.cpp
-    src/caju.cpp
+    caju/interface/native/native.cpp
+    caju/interface/native/posix_interface.cpp
+    caju/logger/logger.cpp
+    caju/caju.cpp
 )
 
 find_package(
