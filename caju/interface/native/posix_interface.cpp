@@ -66,24 +66,6 @@ int open64(const char* path, int flags, ...) {
     }
 }
 
-ssize_t read(int fd, void* buf, size_t count) {
-    SPDLOG_LOGGER_TRACE(logger, "read({}, {}, {})", fd, buf, count);
-    if (!caju) {
-        return Native::read(fd, buf, count);
-    }
-    if (fd == 0 || fd == 1 || fd == 2) {
-        return Native::read(fd, buf, count);
-    }
-    return 0; // TODO
-}
-size_t fread(void* ptr, size_t size, size_t nmemb, FILE* stream) {
-    SPDLOG_LOGGER_TRACE(logger, "read({}, {}, {}, ...)", ptr, size, nmemb);
-    if (!caju) {
-        return Native::fread(ptr, size, nmemb, stream);
-    }
-    return 0; // TODO
-}
-
 FILE* fopen(const char* pathname, const char* mode) {
     SPDLOG_LOGGER_TRACE(logger, "fopen({}, {})", pathname, mode);
     if (!caju)
@@ -97,6 +79,24 @@ FILE* fopen64(const char* pathname, const char* mode) {
 
     if (!caju)
         return Native::fopen(pathname, mode);
+    return 0; // TODO
+}
+
+ssize_t read(int fd, void* buf, size_t count) {
+    SPDLOG_LOGGER_TRACE(logger, "read({}, {}, {})", fd, buf, count);
+    if (!caju) {
+        return Native::read(fd, buf, count);
+    }
+    if (fd == 0 || fd == 1 || fd == 2) {
+        return Native::read(fd, buf, count);
+    }
+    return 0; // TODO
+}
+size_t fread(void* ptr, size_t size, size_t nmemb, FILE* stream) {
+    SPDLOG_LOGGER_TRACE(logger, "read({}, {}, {}, stream*)", ptr, size, nmemb);
+    if (!caju) {
+        return Native::fread(ptr, size, nmemb, stream);
+    }
     return 0; // TODO
 }
 
