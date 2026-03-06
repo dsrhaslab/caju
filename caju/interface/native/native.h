@@ -1,5 +1,4 @@
-#ifndef NATIVE
-#define NATIVE
+#pragma once
 
 #include <cstdio>
 #include <fcntl.h>
@@ -49,7 +48,4 @@ class Native {
 
   private:
 };
-
-
-#endif //NATIVE
 
