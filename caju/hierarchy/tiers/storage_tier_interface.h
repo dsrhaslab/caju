@@ -1,5 +1,4 @@
-#ifndef CAJU_STORAGE_TIER_H
-#define CAJU_STORAGE_TIER_H
+#pragma once
 
 #include <memory>
 #include <unistd.h>
@@ -15,5 +14,3 @@ class StorageTier {
     virtual Status<ssize_t> close(FileId& file_id, ) = 0;
     
 };
-
-#endif // CAJU_STORAGE_TIER_H

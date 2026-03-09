@@ -1,5 +1,4 @@
-#ifndef CAJU_FILESYSTEM_STORAGE_TIER_H
-#define CAJU_FILESYSTEM_STORAGE_TIER_H
+#pragma once
 
 #include <caju/hierarchy/tiers/storage_tier_interface.h>
 #include <caju/interface/native/native.h>
@@ -19,5 +18,3 @@ class PosixFileSystemStorageTier : public StorageTier {
     Status<ssize_t> write(FileId& file_id, const void* buf, size_t count);
     Status<size_t>  fwrite(FileId& file_id, const void* ptr, size_t size, size_t n);
 };
-
-#endif // CAJU_FILESYSTEM_STORAGE_TIER_H
