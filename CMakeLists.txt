@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.17.5)
 
 project(caju VERSION 1.0.1 DESCRIPTION "caju description")
+option(SDPLOG_ACTIVE_LEVEL "SDPLOG_ACTIVE_LEVEL" SPDLOG_LEVEL_OFF)
+
 
 list(APPEND CMAKE_PREFIX_PATH $ENV{INSTALL_DIR})
 
@@ -18,22 +20,25 @@ if (UNIX AND NOT APPLE)
 
 endif ()
 
+add_compile_definitions(SPDLOG_ACTIVE_LEVEL=${SPDLOG_ACTIVE_LEVEL})
+
 add_library(${CMAKE_PROJECT_NAME} SHARED
-    src/interface/native/native.cpp
-    src/interface/native/posix_interface.cpp
-    src/caju.cpp
+    caju/interface/native/native.cpp
+    caju/interface/native/posix_interface.cpp
+    caju/logger/logger.cpp
+    caju/caju.cpp
 )
 
-# find_package(
-#     thallium REQUIRED
-#     PATHS
-#     $ENV{INSTALL_DIR}
-#     # ${CMAKE_CURRENT_SOURCE_DIR}/local
-# )
+find_package(
+    spdlog REQUIRED
+    PATHS
+    $ENV{INSTALL_DIR}
+    # ${CMAKE_CURRENT_SOURCE_DIR}/local
+)
 
 target_link_libraries(
     ${CMAKE_PROJECT_NAME}
-    # thallium
+    spdlog::spdlog
 )
 
 

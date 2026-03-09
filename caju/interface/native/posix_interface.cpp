@@ -1,6 +1,13 @@
 #include "native.h"
+#include "spdlog/spdlog.h"
+#include "caju/caju.h"
+#include "caju/logger/logger.h"
 #include <cstdarg>
-#include "src/caju.h"
+#include <spdlog/common.h>
+
+#if SPDLOG_ACTIVE_LEVEL != SPDLOG_LEVEL_OFF
+auto logger = Logger::getInstance().make_logger("posix_operations");
+#endif // SPDLOG_ACTIVE_LEVEL |= SPD_LEVEL_OFF
 
 Caju* caju = new Caju();
 
@@ -20,6 +27,8 @@ int open(const char* path, int flags, ...) {
         mode_t mode = va_arg(args, int);
         va_end(args);
 
+        SPDLOG_LOGGER_TRACE(logger, "open({}, {}, {})", path, flags, mode);
+
         if (!caju)
             return Native::open(path, flags, mode);
 
@@ -29,6 +38,7 @@ int open(const char* path, int flags, ...) {
         if (!caju)
             return Native::open(path, flags);
 
+        SPDLOG_LOGGER_TRACE(logger, "open({}, {})", path, flags);
         return 0; // TODO
     }
 }
@@ -41,12 +51,14 @@ int open64(const char* path, int flags, ...) {
         mode_t mode = va_arg(args, int);
         va_end(args);
 
+        SPDLOG_LOGGER_TRACE(logger, "open64({}, {}, {})", path, flags, mode);
         if (!caju)
             return Native::open64(path, flags, mode);
 
         return 0; // TODO
     } else {
 
+        SPDLOG_LOGGER_TRACE(logger, "open64({}, {})", path, flags);
         if (!caju)
             return Native::open64(path, flags);
 
@@ -54,7 +66,24 @@ int open64(const char* path, int flags, ...) {
     }
 }
 
+FILE* fopen(const char* pathname, const char* mode) {
+    SPDLOG_LOGGER_TRACE(logger, "fopen({}, {})", pathname, mode);
+    if (!caju)
+        return Native::fopen(pathname, mode);
+    return 0; // TODO
+}
+
+FILE* fopen64(const char* pathname, const char* mode) {
+
+    SPDLOG_LOGGER_TRACE(logger, "fopen64({}, {})", pathname, mode);
+
+    if (!caju)
+        return Native::fopen(pathname, mode);
+    return 0; // TODO
+}
+
 ssize_t read(int fd, void* buf, size_t count) {
+    SPDLOG_LOGGER_TRACE(logger, "read({}, {}, {})", fd, buf, count);
     if (!caju) {
         return Native::read(fd, buf, count);
     }
@@ -64,25 +93,17 @@ ssize_t read(int fd, void* buf, size_t count) {
     return 0; // TODO
 }
 size_t fread(void* ptr, size_t size, size_t nmemb, FILE* stream) {
+    SPDLOG_LOGGER_TRACE(logger, "read({}, {}, {}, stream*)", ptr, size, nmemb);
     if (!caju) {
         return Native::fread(ptr, size, nmemb, stream);
     }
     return 0; // TODO
 }
 
-FILE* fopen(const char* pathname, const char* mode) {
-    if (!caju)
-        return Native::fopen(pathname, mode);
-    return 0; // TODO
-}
-
-FILE* fopen64(const char* pathname, const char* mode) {
-    if (!caju)
-        return Native::fopen(pathname, mode);
-    return 0; // TODO
-}
-
 size_t fwrite(const void* ptr, size_t size, size_t nmemb, FILE* stream) {
+
+    SPDLOG_LOGGER_TRACE(logger, "fwrite({}, {}, {}, stream*)", ptr, size, nmemb);
+
     if (!caju)
         return Native::fwrite(ptr, size, nmemb, stream);
     // check for writes to stdin/out/err
@@ -91,6 +112,9 @@ size_t fwrite(const void* ptr, size_t size, size_t nmemb, FILE* stream) {
 }
 
 ssize_t write(int fd, const void* buf, size_t count) {
+
+    SPDLOG_LOGGER_TRACE(logger, "write({}, {}, {})", fd, buf, count);
+
     if (!caju)
         return Native::write(fd, buf, count);
     // check for writes to stdin/out/err
@@ -102,6 +126,9 @@ ssize_t write(int fd, const void* buf, size_t count) {
 }
 
 ssize_t writev(int fd, const struct iovec* iov, int iovcnt) {
+
+    SPDLOG_LOGGER_TRACE(logger, "writev({}, iov*, {})", fd, iovcnt);
+
     if (!caju)
         return Native::writev(fd, iov, iovcnt);
     // check for writes to stdin/out/err
@@ -114,6 +141,8 @@ ssize_t writev(int fd, const struct iovec* iov, int iovcnt) {
 
 int close(int fd) {
 
+    SPDLOG_LOGGER_TRACE(logger, "close({})", fd);
+
     if (!caju)
         return Native::close(fd);
 
@@ -122,6 +151,7 @@ int close(int fd) {
 
 int fclose(FILE* stream) {
 
+    SPDLOG_LOGGER_TRACE(logger, "fclose(stream*)");
     if (!caju)
         return Native::fclose(stream);
 
