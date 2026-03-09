@@ -25,6 +25,7 @@ add_compile_definitions(SPDLOG_ACTIVE_LEVEL=${SPDLOG_ACTIVE_LEVEL})
 add_library(${CMAKE_PROJECT_NAME} SHARED
     caju/interface/native/native.cpp
     caju/interface/native/posix_interface.cpp
+    caju/thallium/thallium_engine.cpp
     caju/logger/logger.cpp
     caju/caju.cpp
 )

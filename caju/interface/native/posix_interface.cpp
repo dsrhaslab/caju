@@ -6,7 +6,7 @@
 #include <spdlog/common.h>
 
 #if SPDLOG_ACTIVE_LEVEL != SPDLOG_LEVEL_OFF
-auto logger = Logger::getInstance().make_logger("posix_operations");
+static auto logger = Logger::getInstance().make_logger("posix_operations");
 #endif // SPDLOG_ACTIVE_LEVEL |= SPD_LEVEL_OFF
 
 Caju* caju = new Caju();
