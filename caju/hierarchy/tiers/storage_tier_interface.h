@@ -5,12 +5,17 @@
 #include <iostream>
 
 #include <caju/metadata/file_id.h>
+#include <caju/metadata/call_wrappers.h>
 #include <caju/hierarchy/utils/status.h>
 
 class StorageTier {
-    virtual Status<ssize_t> read (FileId& file_id, char* result, size_t n) = 0;
-    virtual Status<ssize_t> read (FileId& file_id, char* result, uint64_t offset, size_t n) = 0;
-    virtual Status<ssize_t> write(FileId& file_id, ) = 0;
-    virtual Status<ssize_t> close(FileId& file_id, ) = 0;
-    
+
+public:
+    virtual Status<FileId&> open(OpenCall& open_call) = 0;
+    virtual Status<int>     close(FileId& file_id) = 0;
+    virtual Status<ssize_t> read(ReadCall& read_call) = 0;
+    virtual Status<ssize_t> write(WriteCall& write_call) = 0;
+    virtual Status<int>     remove(FileId& file_id) = 0;
+    //virtual Status<FileId&> has_file(???) = 0;
+
 };
