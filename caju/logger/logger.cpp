@@ -12,6 +12,7 @@ Logger::Logger() {
 }
 
 Logger::~Logger() {
+    spdlog::shutdown();
 }
 
 Logger& Logger::getInstance() {
@@ -23,5 +24,6 @@ Logger& Logger::getInstance() {
 
 std::shared_ptr<spdlog::logger> Logger::make_logger(const std::basic_string<char> logger_name) {
 
+    //"_mt" means multi_threaded, as in allows for multiple threads to use it simultaneously, "_st" (single threaded) is also available
     return logger = spdlog::stdout_color_mt(logger_name);
 }
