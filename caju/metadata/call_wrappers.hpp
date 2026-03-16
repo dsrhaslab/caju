@@ -16,53 +16,53 @@ class Call {
     virtual R call(FileId& file_id) = 0;
 };
 
-class Generic_fd_call {
+class FdCallArguments {
   public:
     void*  buff;
     size_t count;
 
-    Generic_fd_call(void* buff, size_t count) : buff{buff}, count{count} {};
+    FdCallArguments(void* buff, size_t count) : buff{buff}, count{count} {};
 };
 
-class Generic_stream_call {
+class StreamCallArguments {
   public:
     void*  ptr;
     size_t size;
     size_t nmemb;
 
-    Generic_stream_call(void* ptr, size_t size, size_t nmemb) : ptr{ptr}, size{size}, nmemb{nmemb} {}
+    StreamCallArguments(void* ptr, size_t size, size_t nmemb) : ptr{ptr}, size{size}, nmemb{nmemb} {}
 };
 
 class ReadCall : public Call<ssize_t>,
-                 Generic_fd_call {
+                 FdCallArguments {
 
-    ssize_t call(FileId& file_id) {
-        int fd = (dynamic_cast<FileId_int>(file_id)).fd;
+    ssize_t call(FileId* file_id) {
+        int fd = (dynamic_cast<FileIdInt*>(file_id)).fd;
 
         return Native::read(fd, this->buff, this->count);
     }
 };
 
-class FReadCall : public Call<size_t>, Generic_stream_call {
+class FReadCall : public Call<size_t>, StreamCallArguments {
 
-    size_t call(FileId& file_id) {
-        FILE* stream = (dynamic_cast<FileId_FILE>(file_id)).stream;
+    size_t call(FileId* file_id) {
+        FILE* stream = (dynamic_cast<FileIdFILE*>(file_id)).stream;
 
         return Native::fread(this->ptr, this->size, this->nmemb, stream);
     }
 };
 
-class WriteCall : public Call<ssize_t>, Generic_fd_call {
-    ssize_t call(FileId& file_id) {
-        int fd = (dynamic_cast<FileId_int>(file_id)).fd;
+class WriteCall : public Call<ssize_t>, FdCallArguments {
+    ssize_t call(FileId* file_id) {
+        int fd = (dynamic_cast<FileIdInt*>(file_id)).fd;
 
         return Native::write(fd, this->buff, this->count);
     }
 };
 
-class FWriteCall : Call<size_t>, Generic_stream_call {
-    size_t call(FileId& file_id) {
-        FILE* stream = (dynamic_cast<FileId_FILE>(file_id)).stream;
+class FWriteCall : Call<size_t>, StreamCallArguments {
+    size_t call(FileId* file_id) {
+        FILE* stream = (dynamic_cast<FileIdFILE*>(file_id)).stream;
 
         return Native::fwrite(this->ptr, this->size, this->nmemb, stream);
     }
