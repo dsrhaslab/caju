@@ -4,22 +4,20 @@
 #include <caju/interface/native/native.h>
 
 class PosixFileSystemStorageTier : public StorageTier {
-    Status<FileId&> open(OpenCall& open_call);
-    //Status<FileId>  open(const char* pathname, int flags, mode_t mode);
-    //Status<FileId>  fopen(const char* pathname, int flags, mode_t mode);
-    //Status<FileId>  open64(const char* pathname, int flags, mode_t mode);
-    //Status<FileId>  fopen64(const char* pathname, int flags, mode_t mode);
-    
+public:
+    Status<std::shared_ptr<FileId>> open(const char* path, int flags);
+    Status<std::shared_ptr<FileId>> open(const char* path, int flags, mode_t mode);
+    Status<std::shared_ptr<FileId>> open64(const char* path, int flags);
+    Status<std::shared_ptr<FileId>> open64(const char* path, int flags, mode_t mode);
+    Status<std::shared_ptr<FileId>> fopen(const char* pathname, const char* mode);
+    Status<std::shared_ptr<FileId>> fopen64(const char* pathname, const char* mode);
+
+    Status<ssize_t> read(void* buf, size_t count, FileId& file_id);
+    Status<size_t>  fread(void* ptr, size_t size, size_t nmemb, FileId& file_id);
+    Status<size_t>  fwrite(const void* ptr, size_t size, size_t nmemb, FileId& file_id);
+    Status<ssize_t> write(const void* buf, size_t count, FileId& file_id);
+
+    Status<ssize_t> writev(const struct iovec* iov, int iovcnt, FileId& file_id);
     Status<int>     close(FileId& file_id);
-
-    Status<ssize_t> read(ReadCall& read_call);
-    //Status<ssize_t> read(FileId& file_id, void* result, size_t n);
-    //Status<ssize_t> read(FileId& file_id, void* result, uint64_t offset, size_t n);
-    //Status<size_t>  fread(FileId& file_id, void* result, size_t size, size_t n);
-
-    Status<ssize_t> write(WriteCall& write_call);
-    //Status<ssize_t> write(FileId& file_id, const void* buf, size_t count);
-    //Status<size_t>  fwrite(FileId& file_id, const void* ptr, size_t size, size_t n);
-
-    Status<int>     remove(FileId& file_id);
+    Status<int>     fclose(FileId& file_id);
 };
