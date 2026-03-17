@@ -7,12 +7,10 @@ class FileId {
 public:
     StorageTier& tier;
 
-    ~FileId();
+    virtual ~FileId();
     FileId()                      = delete;
     FileId(const FileId&)         = delete;
     void operator=(const FileId&) = delete;
-    FileId(StorageTier& tier) {}
-private:
     FileId(StorageTier& tier) : tier(tier) {}
 
 };
@@ -24,6 +22,7 @@ public:
 };
 
 class FileIdFILE : public FileId {
+public:
     FILE *stream;
     FileIdFILE(StorageTier& tier, FILE *stream) : FileId(tier), stream(stream) {}
 };
