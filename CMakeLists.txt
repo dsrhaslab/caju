@@ -79,6 +79,6 @@ if (BUILD_TESTS)
         add_test(NAME "${test_target_name}" COMMAND "${test_target_name}")
     endfunction(caju_test)
 
-    caju_test("caju/hierarchy/tests/posix_filesystem.cpp" "posix_fs_test")
+    caju_test("caju/hierarchy/tiers/posix_filesystem_storage_tier.test.cpp" "posix_fs_test")
 
 endif (BUILD_TESTS)

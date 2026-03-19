@@ -20,7 +20,7 @@ Status<std::unique_ptr<FileId>> PosixFileSystemStorageTier::open(const char* pat
 }
 
 Status<std::unique_ptr<FileId>> PosixFileSystemStorageTier::open(const char* path, int flags, mode_t mode) {
-    int fd = Native::open(path, flags,mode);
+    int fd = Native::open(path, flags, mode);
     return create_fileid_from_fd(fd);
 }
 
