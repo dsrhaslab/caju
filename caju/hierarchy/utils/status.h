@@ -23,17 +23,10 @@ public:
     State state;
     R return_value;
 
-    Status(State s, R return_value_){
-        state = s;
-        return_value = return_value_;
-    }
-    Status(R return_value_){
-        state = SUCCESS;
-        return_value = return_value_;
-    }
-    Status(State s){
-        state = s;
-    }
+    //TODO check if this move can be moving elements that were supposed to be copied 
+    Status(State s, R return_value_) : state(s), return_value(std::move(return_value_)) {} 
+    Status(R return_value_) : state(SUCCESS), return_value(std::move(return_value_)) {}
+    Status(State s) : state(s) {}
 };
 
 #endif //CAJU_STATUS_H

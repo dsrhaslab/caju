@@ -1,5 +1,9 @@
 #include <caju/hierarchy/tiers/posix_filesystem_storage_tier.h>
 
+#if SPDLOG_ACTIVE_LEVEL != SPDLOG_LEVEL_OFF
+static auto logger = Logger::getInstance().make_logger("posix_filesystem_storage_tier");
+#endif // SPDLOG_ACTIVE_LEVEL |= SPD_LEVEL_OFF
+
 Status<std::unique_ptr<FileId>> PosixFileSystemStorageTier::create_fileid_from_fd(int fd) {
     std::unique_ptr<FileIdInt> file_id = std::make_unique<FileIdInt>(*this, fd);
     return Status<std::unique_ptr<FileId>>(SUCCESS, std::move(file_id));
@@ -42,7 +46,9 @@ Status<std::unique_ptr<FileId>> PosixFileSystemStorageTier::fopen64(const char* 
 
 Status<ssize_t> PosixFileSystemStorageTier::read(void* buf, size_t count, FileId& file_id) {
     FileIdInt& file_id_int = dynamic_cast<FileIdInt&>(file_id);
+    SPDLOG_LOGGER_TRACE(logger, "read(count: {}, fd: {})", count, file_id_int.fd);
     ssize_t ret = Native::read(file_id_int.fd, buf, count);
+    SPDLOG_LOGGER_TRACE(logger, "read result -> ret: {}, buf: {}", ret, (char *) buf);
     return Status<ssize_t>(ret);
 }
 

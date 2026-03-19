@@ -5,8 +5,8 @@
 #include <iostream>
 
 #include <caju/metadata/file_id.h>
-#include <caju/metadata/call_wrappers.hpp>
 #include <caju/hierarchy/utils/status.h>
+#include <caju/logger/logger.h>
 
 class StorageTier {
 
@@ -26,4 +26,5 @@ public:
 
     virtual Status<int>     close(FileId& file_id) = 0;
     virtual Status<int>     fclose(FileId& file_id) = 0;
+    virtual ~StorageTier() = default;
 };

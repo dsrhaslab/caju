@@ -1,13 +1,12 @@
 #!/bin/bash
 
-SOURCE_FILE_DIR=$2
-
-if [ -z $1 ]; then
-    echo "usage: <cmd> <install location(must be full path)>"
+if [ -z $1 -o -z $2 ]; then
+    echo "usage: <cmd> <install location(must be full path)> <source file location>"
     exit 0
 fi
 
 INSTALL_PREFIX=$1
+SOURCE_FILE_DIR=$2
 
 #DO NOT CHANGE ORDER
 ./libfabric.sh $INSTALL_PREFIX $SOURCE_FILE_DIR
