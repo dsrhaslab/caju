@@ -24,12 +24,16 @@ endif ()
 
 add_compile_definitions(SPDLOG_ACTIVE_LEVEL=${SPDLOG_ACTIVE_LEVEL})
 
-add_library(${CMAKE_PROJECT_NAME} SHARED
-    caju/hierarchy/tiers/posix_filesystem_storage_tier.cpp
+add_library("${CMAKE_PROJECT_NAME}_tests" SHARED
+    caju/hierarchy/tiers/posix_filesystem_storage_driver.cpp
     caju/interface/native/native.cpp
     caju/thallium/thallium_engine.cpp
     caju/logger/logger.cpp
     caju/caju.cpp
+)
+
+add_library(${CMAKE_PROJECT_NAME} SHARED
+    caju/interface/native/posix_interface.cpp
 )
 
 find_package(
@@ -47,14 +51,20 @@ find_package(
 )
 
 target_link_libraries(
-    ${CMAKE_PROJECT_NAME}
+    "${CMAKE_PROJECT_NAME}_tests"
     spdlog::spdlog
     thallium
 )
 
+target_link_libraries(
+    ${CMAKE_PROJECT_NAME}
+    "${CMAKE_PROJECT_NAME}_tests"
+    spdlog::spdlog
+    thallium
+)
 
+target_include_directories(${CMAKE_PROJECT_NAME}_tests PRIVATE .)
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE .)
-
 
 # ---------------------------------------------------------------------------- #
 # tests
@@ -74,11 +84,11 @@ if (BUILD_TESTS)
 
         target_include_directories(${test_target_name} PRIVATE .)
         target_compile_options("${test_target_name}" PRIVATE ${warn_opts})
-        target_link_libraries("${test_target_name}" ${CMAKE_PROJECT_NAME})
+        target_link_libraries("${test_target_name}" "${CMAKE_PROJECT_NAME}_tests")
 
         add_test(NAME "${test_target_name}" COMMAND "${test_target_name}")
     endfunction(caju_test)
 
-    caju_test("caju/hierarchy/tiers/posix_filesystem_storage_tier.test.cpp" "posix_fs_test")
+    caju_test("caju/hierarchy/tiers/posix_filesystem_storage_driver.test.cpp" "tests/posix_fs_test")
 
 endif (BUILD_TESTS)
