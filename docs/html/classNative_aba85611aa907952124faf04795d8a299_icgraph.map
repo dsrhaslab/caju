@@ -1,0 +1,7 @@
+<map id="Native::fwrite" name="Native::fwrite">
+<area shape="rect" id="Node000001" title=" " alt="" coords="272,35,383,60"/>
+<area shape="rect" id="Node000002" href="$posix__interface_8cpp.html#a20d465b196f378c16fc31d4117170623" title=" " alt="" coords="85,5,145,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="257,40,145,25,146,20,258,35"/>
+<area shape="rect" id="Node000003" href="$classPosixFileSystemStorageDriver.html#a55a393758240cd0b6d2b612437b62002" title=" " alt="" coords="5,55,224,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="258,59,224,64,224,58,258,54"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="Native::fopen" name="Native::fopen">
+<area shape="rect" id="Node000001" title=" " alt="" coords="272,70,383,95"/>
+<area shape="rect" id="Node000002" href="$classPosixFileSystemStorageDriver.html#a5be7df8b7e81a66698be0cc6337acecf" title=" " alt="" coords="5,5,224,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="266,69,188,48,190,43,268,64"/>
+<area shape="rect" id="Node000003" href="$posix__interface_8cpp.html#af996810234b04ce3eac0dadf51352d89" title=" " alt="" coords="85,70,144,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="258,85,144,85,144,80,258,80"/>
+<area shape="rect" id="Node000004" href="$posix__interface_8cpp.html#a8c50e3a418f33fde1fbaddd06db54c62" title=" " alt="" coords="77,119,152,145"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="260,101,225,109,153,126,152,121,223,104,259,96"/>
+</map>

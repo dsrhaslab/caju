@@ -1,3 +1,14 @@
+/**
+ * @file posix_interface.cpp
+ * @author Andre Lucena | Fabio Souza | Goncalo Sousa
+ * @brief Implementation of the POSIX interface functions
+ * @version 0.1
+ * @date 2026-03-24
+ * 
+ * @copyright Copyright (c) 2026
+ * 
+ */
+ 
 #include "native.h"
 #include "spdlog/spdlog.h"
 #include "caju/caju.h"

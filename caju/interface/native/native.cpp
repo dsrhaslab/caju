@@ -1,3 +1,14 @@
+/**
+ * @file native.cpp
+ * @author Andre Lucena | Fabio Souza | Goncalo Sousa
+ * @brief Implementation of the Native class
+ * @version 0.1
+ * @date 2026-03-24
+ * 
+ * @copyright Copyright (c) 2026
+ * 
+ */
+ 
 #include "native.h"
 #include <dlfcn.h>
 #include <fcntl.h>
@@ -11,11 +22,11 @@ int Native::open(const char* path, int flags) {
 }
 
 int Native::open64(const char* path, int flags, mode_t mode) {
-    return ((libc_open64_variadic_t)dlsym(RTLD_NEXT, "close"))(path, flags, mode);
+    return ((libc_open64_variadic_t)dlsym(RTLD_NEXT, "open64"))(path, flags, mode);
 }
 
 int Native::open64(const char* path, int flags) {
-    return ((libc_open64_t)dlsym(RTLD_NEXT, "close"))(path, flags);
+    return ((libc_open64_t)dlsym(RTLD_NEXT, "open64"))(path, flags);
 }
 
 FILE* Native::fopen(const char* pathname, const char* mode) {

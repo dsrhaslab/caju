@@ -1,3 +1,14 @@
+/**
+ * @file native.h
+ * @author Andre Lucena | Fabio Souza | Goncalo Sousa
+ * @brief Declaration of the Native class
+ * @version 0.1
+ * @date 2026-03-24
+ * 
+ * @copyright Copyright (c) 2026
+ * 
+ */
+ 
 #pragma once
 
 #include <cstdio>
@@ -20,6 +31,10 @@ using libc_writev_t = ssize_t (*)(int, const struct iovec*, int);
 using libc_close_t  = int (*)(int);
 using libc_fclose_t = int (*)(FILE*);
 
+/**
+ * @brief Native class provides static methods for native file operations.
+ * 
+ */
 class Native {
   public:
     Native()                         = delete;
