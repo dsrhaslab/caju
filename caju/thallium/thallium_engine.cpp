@@ -59,7 +59,7 @@ ThalliumEngine::ThalliumEngine(const std::string& local_address, int mode, bool 
             const thallium::request& req,
             const std::string        path,
             int                      flags,
-            mode_t                   mode) {
+            unsigned int             mode) {
             open_rpc(req, path, flags, mode);
         });
 
@@ -93,15 +93,13 @@ void ThalliumEngine::open_rpc(const thallium::request& req, const std::string& p
     req.respond(fd);
 }
 
+void ThalliumEngine::close_rpc(const thallium::request& req, int metadata_map_key) {
 
-void ThalliumEngine::close_rpc(const thallium::request& req, int metadata_map_key){
-
-    //TODO deffer close to the handler
+    // TODO deffer close to the handler
     SPDLOG_LOGGER_TRACE(logger, "close(req, metadata_map_key:{})", metadata_map_key);
 
     req.respond(0);
 }
-
 
 void ThalliumEngine::write_rpc(const thallium::request& req, const thallium::bulk remote_bulk_handler, size_t count, int metadata_map_key) {
 
@@ -129,7 +127,7 @@ void ThalliumEngine::write_rpc(const thallium::request& req, const thallium::bul
 
     req.respond(bytes_written);
 }
-        
+
 void ThalliumEngine::read_rpc(const thallium::request& req, const thallium::bulk remote_bulk_handler, size_t count, int metadata_map_key) {
 
     thallium::endpoint client = req.get_endpoint();

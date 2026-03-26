@@ -5,7 +5,7 @@
 #ifndef CAJU_STATUS_H
 #define CAJU_STATUS_H
 
-#include <stdio.h>
+#include <utility>
 
 enum State {
     NILL = 0x00,

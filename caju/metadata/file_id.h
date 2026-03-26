@@ -13,7 +13,7 @@ StorageDriver& tier;
     FileId()                      = delete;
     FileId(const FileId&)         = delete;
     void operator=(const FileId&) = delete;
-    FileId(StorageDriver& tier) : tier(tier) {}
+    FileId(StorageDriver& tier_) : tier(tier_) {}
 
 };
 
@@ -21,12 +21,12 @@ class FileIdInt : public FileId {
 public:
     int fd;
     ~FileIdInt() = default;
-    FileIdInt(StorageDriver& tier, int fd) : FileId(tier), fd(fd) {}
+    FileIdInt(StorageDriver& tier_, int fd) : FileId(tier_), fd(fd) {}
 };
 
 class FileIdFILE : public FileId {
 public:
     FILE *stream;
     ~FileIdFILE() = default;
-    FileIdFILE(StorageDriver& tier, FILE *stream) : FileId(tier), stream(stream) {}
+    FileIdFILE(StorageDriver& tier_, FILE *stream) : FileId(tier_), stream(stream) {}
 };

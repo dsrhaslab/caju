@@ -2,7 +2,6 @@
 
 #include <memory>
 #include <unistd.h>
-#include <iostream>
 
 #include <caju/metadata/file_id.h>
 //#include <caju/hierarchy/utils/status.h>

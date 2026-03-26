@@ -1,5 +1,4 @@
 #include "neighboring_node_storage_tier.h"
-#include "caju/hierarchy/utils/status.h"
 #include "caju/logger/logger.h"
 #include "caju/metadata/file_id.h"
 #include "caju/thallium/thallium_engine.h"
@@ -14,60 +13,46 @@
 static auto logger = Logger::getInstance().make_logger("neighboring_node_storage_tier");
 #endif
 
-// repeted function yeeeepeyy
-Status<std::unique_ptr<FileId>> NeighboringNodeStorageTier::create_fileid_from_fd(int fd) {
-    std::unique_ptr<FileIdInt> file_id = std::make_unique<FileIdInt>(*this, fd);
-    return Status<std::unique_ptr<FileId>>(SUCCESS, std::move(file_id));
-}
-
-Status<std::unique_ptr<FileId>> NeighboringNodeStorageTier::create_fileid_from_stream(FILE* stream) {
-    std::unique_ptr<FileIdFILE> file_id = std::make_unique<FileIdFILE>(*this, stream);
-    return Status<std::unique_ptr<FileId>>(SUCCESS, std::move(file_id));
-}
 
 NeighboringNodeStorageTier::NeighboringNodeStorageTier(const std::string address) : address{address} {
     SPDLOG_LOGGER_TRACE(logger, "NeighboringNodeStorageTier({})", address);
 }
 
-Status<std::unique_ptr<FileId>> NeighboringNodeStorageTier::open(const char* path, int flags) {
+std::unique_ptr<FileId> NeighboringNodeStorageTier::open(const char* path, int flags) {
 
     thallium::endpoint server_endpoint = ThalliumEngine::getInstance().lookup(this->address);
 
-    int metadata_map_key = ThalliumEngine::getInstance().open_rpc_handler.on(server_endpoint)(path, flags);
+    int metadata_map_key = ThalliumEngine::getInstance().open_rpc_handler.on(server_endpoint)(std::string(path), flags);
 
     SPDLOG_LOGGER_TRACE(logger, "open(path:{}, flags:{}) -> metadata_map_key:{}", path, flags, metadata_map_key);
 
-    std::unique_ptr<FileIdInt> file_id = std::make_unique<FileIdInt>(*this, std::move(metadata_map_key));
-
-    return Status<std::unique_ptr<FileId>>(SUCCESS, std::move(file_id));
+    return std::make_unique<FileIdInt>(*this, metadata_map_key);
 }
 
-Status<std::unique_ptr<FileId>> NeighboringNodeStorageTier::open(const char* path, int flags, mode_t mode) {
+std::unique_ptr<FileId> NeighboringNodeStorageTier::open(const char* path, int flags, mode_t mode) {
 
     thallium::endpoint server_endpoint = ThalliumEngine::getInstance().lookup(this->address);
 
-    int metadata_map_key = ThalliumEngine::getInstance().open_variadic_rpc_handler.on(server_endpoint)(path, flags);
+    int metadata_map_key = ThalliumEngine::getInstance().open_variadic_rpc_handler.on(server_endpoint)(std::string(path), flags, mode);
 
     SPDLOG_LOGGER_TRACE(logger, "open(path:{}, flags:{}, mode:{}) -> metadata_map_key:{}", path, flags, mode, metadata_map_key);
 
-    std::unique_ptr<FileIdInt> file_id = std::make_unique<FileIdInt>(*this, std::move(metadata_map_key));
-
-    return Status<std::unique_ptr<FileId>>(SUCCESS, std::move(file_id));
+    return std::make_unique<FileIdInt>(*this, std::move(metadata_map_key));
 }
 
-Status<std::unique_ptr<FileId>> NeighboringNodeStorageTier::open64(const char* path, int flags) {
+std::unique_ptr<FileId> NeighboringNodeStorageTier::open64(const char* path, int flags) {
 }
 
-Status<std::unique_ptr<FileId>> NeighboringNodeStorageTier::open64(const char* path, int flags, mode_t mode) {
+std::unique_ptr<FileId> NeighboringNodeStorageTier::open64(const char* path, int flags, mode_t mode) {
 }
 
-Status<std::unique_ptr<FileId>> NeighboringNodeStorageTier::fopen(const char* pathname, const char* mode) {
+std::unique_ptr<FileId> NeighboringNodeStorageTier::fopen(const char* pathname, const char* mode) {
 }
 
-Status<std::unique_ptr<FileId>> NeighboringNodeStorageTier::fopen64(const char* pathname, const char* mode) {
+std::unique_ptr<FileId> NeighboringNodeStorageTier::fopen64(const char* pathname, const char* mode) {
 }
 
-Status<ssize_t> NeighboringNodeStorageTier::read(void* buf, size_t count, FileId& file_id) {
+ssize_t NeighboringNodeStorageTier::read(void* buf, size_t count, FileId& file_id) {
 
     std::vector<std::pair<void*, std::size_t>> segments(1);
 
@@ -87,11 +72,11 @@ Status<ssize_t> NeighboringNodeStorageTier::read(void* buf, size_t count, FileId
 
     SPDLOG_LOGGER_TRACE(logger, "read(buf:{}, count:{}, metadata_map_key:{}) -> bytes_written:{}", buf, count, file_id_int.fd, bytes_read);;
 
-    return Status<ssize_t>(SUCCESS, bytes_read);
+    return bytes_read;
 
 }
 
-Status<ssize_t> NeighboringNodeStorageTier::write(const void* buf, size_t count, FileId& file_id) {
+ssize_t NeighboringNodeStorageTier::write(const void* buf, size_t count, FileId& file_id) {
 
     std::vector<std::pair<void*, std::size_t>> segments(1);
 
@@ -111,19 +96,19 @@ Status<ssize_t> NeighboringNodeStorageTier::write(const void* buf, size_t count,
 
     SPDLOG_LOGGER_TRACE(logger, "write(buf:{}, count:{}, metadata_map_key:{}) -> bytes_written:{}", buf, count, file_id_int.fd, bytes_written);;
 
-    return Status<ssize_t>(SUCCESS, bytes_written);
+    return bytes_written;
 }
 
-Status<ssize_t> NeighboringNodeStorageTier::writev(const struct iovec* iov, int iovcnt, FileId& file_id) {
+ssize_t NeighboringNodeStorageTier::writev(const struct iovec* iov, int iovcnt, FileId& file_id) {
 }
 
-Status<size_t> NeighboringNodeStorageTier::fread(void* ptr, size_t size, size_t nmemb, FileId& file_id) {
+size_t NeighboringNodeStorageTier::fread(void* ptr, size_t size, size_t nmemb, FileId& file_id) {
 }
 
-Status<size_t> NeighboringNodeStorageTier::fwrite(const void* ptr, size_t size, size_t nmemb, FileId& file_id) {
+size_t NeighboringNodeStorageTier::fwrite(const void* ptr, size_t size, size_t nmemb, FileId& file_id) {
 }
 
-Status<int> NeighboringNodeStorageTier::close(FileId& file_id) {
+int NeighboringNodeStorageTier::close(FileId& file_id) {
 
     thallium::endpoint server_endpoint = ThalliumEngine::getInstance().lookup(this->address);
 
@@ -133,9 +118,9 @@ Status<int> NeighboringNodeStorageTier::close(FileId& file_id) {
 
     SPDLOG_LOGGER_TRACE(logger, "close(FileIdInt:{}) -> {}", file_id_int.fd, return_value);
 
-    return Status<int>(SUCCESS, return_value);
+    return return_value;
 
 }
 
-Status<int> NeighboringNodeStorageTier::fclose(FileId& file_id) {
+int NeighboringNodeStorageTier::fclose(FileId& file_id) {
 }
