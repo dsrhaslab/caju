@@ -1,5 +1,8 @@
 #pragma once
 
+#include <cstdio>
+#include <thallium/bulk_mode.hpp>
+#include <utility>
 #include <vector> //this is here because it does not compile without it, idk why
 
 #include "caju/logger/logger.h"
@@ -15,64 +18,34 @@
 
 class ThalliumEngine {
   public:
-    ThalliumEngine(std::string& local_address, int mode);
+    static ThalliumEngine& getInstance();
+
     ~ThalliumEngine();
 
-    int run_persistance_RPC(
-        std::string   server_address_string,
-        std::string   file_path,
-        void**        buffers,
-        hg_size_t*    sizes,
-        int           buffer_count,
-        int           original_fd,
-        int           node_id,
-        int           flags,
-        std::string   mode,
-        int           shard_id,
-        bool          is_synchronous = true);
+    inline thallium::bulk expose(const std::vector<std::pair<void*, size_t>>& segments, thallium::bulk_mode flag) {
+        return this->engine.expose(segments, flag);
+    }
+    inline thallium::endpoint lookup(const std::string& server_address){
+        return this->engine.lookup(server_address);
+    }
 
-    void persistanceRPC(
-        thallium::engine&        engine,
-        const thallium::request& req,
-        thallium::bulk&          remote_bulk_handle,
-        int                      size,
-        int                      shard_id,
-        std::string              file_path,
-        int                      original_fd,
-        int                      node_id,
-        int                      flags,
-        std::string              mode,
-        int                      optype);
-
-    int run_persistance_RPC_synch(
-        thallium::endpoint& server,
-        size_t&             total_size,
-        std::string         file_path,
-        void**              buffers,
-        hg_size_t*          sizes,
-        int                 buffer_count,
-        int                 original_fd,
-        int                 node_id,
-        int                 flags,
-        std::string         mode,
-        int                 shard_id);
-
-    int run_persistance_RPC_asynch(
-        thallium::endpoint& server,
-        size_t&             total_size,
-        std::string         file_path,
-        void**              buffers,
-        hg_size_t*          sizes,
-        int                 buffer_count,
-        int                 original_fd,
-        int                 node_id,
-        int                 flags,
-        std::string         mode,
-        int                 shard_id);
-
-    static void CloseFDOnTargetRPC(thallium::request& request, int original_fd, std::string& path);
-    thallium::engine           engine;
+    thallium::remote_procedure open_rpc_handler;
+    thallium::remote_procedure open_variadic_rpc_handler;
+    thallium::remote_procedure write_rpc_handler;
+    thallium::remote_procedure read_rpc_handler;
+    thallium::remote_procedure close_rpc_handler;
 
   private:
-    thallium::remote_procedure persistanceRPC_remote_procedure;
+    ThalliumEngine(const std::string& local_address, int mode, bool use_progress_thread, int rpc_thread_count);
+    ThalliumEngine()                       = delete;
+    ThalliumEngine(const ThalliumEngine&&) = delete;
+    void operator=(const Logger&)          = delete;
+
+    void open_rpc(const thallium::request& req, const std::string& path, int flags, mode_t mode);
+    void open_rpc(const thallium::request& req, const std::string& path, int flags);
+    void write_rpc(const thallium::request& req, const thallium::bulk remote_bulk_handler, size_t count, int metadata_map_key);
+    void read_rpc(const thallium::request& req, const thallium::bulk remote_bulk_handler, size_t count, int metadata_map_key);
+    void close_rpc(const thallium::request& req, int metadata_map_key);
+
+    thallium::engine engine;
 };
