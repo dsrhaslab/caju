@@ -1,6 +1,7 @@
 #include "thallium_engine.h"
 #include "caju/logger/logger.h"
 #include <abt.h>
+#include <cstddef>
 #include <cstdlib>
 #include <dlfcn.h>
 #include <fcntl.h>
@@ -18,6 +19,7 @@
 #include <thallium/task.hpp>
 #include <thallium/thread.hpp>
 #include <unistd.h>
+#include <vector>
 
 #if SPDLOG_ACTIVE_LEVEL != SPDLOG_LEVEL_OFF
 static auto logger = Logger::getInstance().make_logger("thallium_engine");
@@ -59,8 +61,8 @@ ThalliumEngine::ThalliumEngine(const std::string& local_address, int mode, bool 
             const thallium::request& req,
             const std::string        path,
             int                      flags,
-            unsigned int             mode) {
-            open_rpc(req, path, flags, mode);
+            unsigned int             open_mode) {
+            open_rpc(req, path, flags, open_mode);
         });
 
     this->write_rpc_handler = this->engine.define(
@@ -107,9 +109,9 @@ void ThalliumEngine::write_rpc(const thallium::request& req, const thallium::bul
 
     std::vector<std::pair<void*, std::size_t>> segments(1);
 
-    char buffer[count];
+    std::vector<void*> buffer(count);
 
-    segments[0].first  = (void*)buffer;
+    segments[0].first  = static_cast<void*>(&buffer[0]);
     segments[0].second = count;
 
     thallium::bulk local_bulk_handle = this->engine.expose(segments, thallium::bulk_mode::write_only);
@@ -121,7 +123,7 @@ void ThalliumEngine::write_rpc(const thallium::request& req, const thallium::bul
     SPDLOG_LOGGER_DEBUG(logger, "write_rpc(..., count:{}, metadata_map_key:{}) bulk transfer completed", count, metadata_map_key);
 
     // TODO deffer next steps to handler and return bytes written
-    size_t bytes_written = rand();
+    size_t bytes_written = static_cast<size_t>(rand());
 
     SPDLOG_LOGGER_TRACE(logger, "write_rpc(req, remote_bulk_handler, count:{}, metadata_map_key:{}) -> bytes_written:{}", count, metadata_map_key, bytes_written);
 
@@ -134,9 +136,10 @@ void ThalliumEngine::read_rpc(const thallium::request& req, const thallium::bulk
 
     std::vector<std::pair<void*, std::size_t>> segments(1);
 
-    char buffer[count];
+    std::vector<void*> buffer(count);
 
-    segments[0].first  = (void*)buffer;
+
+    segments[0].first  = static_cast<void*>(&buffer[0]);
     segments[0].second = count;
 
     thallium::bulk local_bulk_handle = this->engine.expose(segments, thallium::bulk_mode::read_only);
@@ -148,7 +151,7 @@ void ThalliumEngine::read_rpc(const thallium::request& req, const thallium::bulk
     SPDLOG_LOGGER_DEBUG(logger, "read_rpc(..., count:{}, metadata_map_key:{}) bulk transfer completed", count, metadata_map_key);
 
     // TODO deffer next steps to handler and return bytes written
-    size_t bytes_written = rand();
+    size_t bytes_written = static_cast<size_t>(rand());
 
     SPDLOG_LOGGER_TRACE(logger, "read_rpc(req, remote_bulk_handler, count:{}, metadata_map_key:{}) -> bytes_written:{}", count, metadata_map_key, bytes_written);
 

@@ -13,8 +13,14 @@
 #include <dlfcn.h>
 #include <fcntl.h>
 
+/* disable specific gcc warnings */
+#ifdef __GNUC__
+#pragma GCC diagnostic ignored "-Wold-style-cast"
+#endif
+
+extern "C" {
 int Native::open(const char* path, int flags, mode_t mode) {
-    return ((libc_open_variadic_t)dlsym(RTLD_NEXT, "open"))(path, flags, mode);
+    return ((libc_open_variadic_t)(dlsym(RTLD_NEXT, "open")))(path, flags, mode);
 }
 
 int Native::open(const char* path, int flags) {
@@ -62,4 +68,5 @@ int Native::close(int fd) {
 
 int Native::fclose(FILE* stream) {
     return ((libc_fclose_t)dlsym(RTLD_NEXT, "fclose"))(stream);
+}
 }

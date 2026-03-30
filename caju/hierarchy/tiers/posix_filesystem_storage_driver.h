@@ -22,7 +22,7 @@ public:
     int     fclose(FileId& file_id);
 
     PosixFileSystemStorageDriver() {}
-    PosixFileSystemStorageDriver(std::string tier_dir) : tier_dir(tier_dir) {}
+    PosixFileSystemStorageDriver(std::string tier_dir_arg) : tier_dir(tier_dir_arg) {}
 
 private:
     std::string tier_dir = "";

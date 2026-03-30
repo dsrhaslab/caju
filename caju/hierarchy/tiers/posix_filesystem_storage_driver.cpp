@@ -7,13 +7,13 @@ static auto logger = Logger::getInstance().make_logger("posix_filesystem_storage
 std::unique_ptr<FileId> PosixFileSystemStorageDriver::create_fileid_from_fd(int fd)
 {
     std::unique_ptr<FileIdInt> file_id = std::make_unique<FileIdInt>(*this, fd);
-    return std::move(file_id);
+    return file_id;
 }
 
 std::unique_ptr<FileId> PosixFileSystemStorageDriver::create_fileid_from_stream(FILE *stream)
 {
     std::unique_ptr<FileIdFILE> file_id = std::make_unique<FileIdFILE>(*this, stream);
-    return std::move(file_id);
+    return file_id;
 }
 
 std::unique_ptr<FileId> PosixFileSystemStorageDriver::open(const char *path, int flags)
@@ -57,7 +57,7 @@ ssize_t PosixFileSystemStorageDriver::read(void *buf, size_t count, FileId &file
     FileIdInt &file_id_int = dynamic_cast<FileIdInt &>(file_id);
     SPDLOG_LOGGER_TRACE(logger, "read(count: {}, fd: {})", count, file_id_int.fd);
     ssize_t ret = Native::read(file_id_int.fd, buf, count);
-    SPDLOG_LOGGER_TRACE(logger, "read result -> ret: {}, buf: {}", ret, (char *)buf);
+    SPDLOG_LOGGER_TRACE(logger, "read result -> ret: {}, buf: {}", ret, static_cast<char *>(buf));
     return ret;
 }
 

@@ -14,8 +14,8 @@ static auto logger = Logger::getInstance().make_logger("neighboring_node_storage
 #endif
 
 
-NeighboringNodeStorageTier::NeighboringNodeStorageTier(const std::string address) : address{address} {
-    SPDLOG_LOGGER_TRACE(logger, "NeighboringNodeStorageTier({})", address);
+NeighboringNodeStorageTier::NeighboringNodeStorageTier(const std::string address_arg) : address{address_arg} {
+    SPDLOG_LOGGER_TRACE(logger, "NeighboringNodeStorageTier({})", address_arg);
 }
 
 std::unique_ptr<FileId> NeighboringNodeStorageTier::open(const char* path, int flags) {
@@ -56,7 +56,7 @@ ssize_t NeighboringNodeStorageTier::read(void* buf, size_t count, FileId& file_i
 
     std::vector<std::pair<void*, std::size_t>> segments(1);
 
-    segments[0].first  = (void*)buf;
+    segments[0].first  = buf;
     segments[0].second = count;
 
     thallium::bulk bulk_handler = ThalliumEngine::getInstance().expose(segments, thallium::bulk_mode::write_only);
@@ -80,7 +80,7 @@ ssize_t NeighboringNodeStorageTier::write(const void* buf, size_t count, FileId&
 
     std::vector<std::pair<void*, std::size_t>> segments(1);
 
-    segments[0].first  = (void*)buf;
+    segments[0].first  = const_cast<void*>(buf);
     segments[0].second = count;
 
     thallium::bulk bulk_handler = ThalliumEngine::getInstance().expose(segments, thallium::bulk_mode::read_only);

@@ -16,6 +16,13 @@
 #include <cstdarg>
 #include <spdlog/common.h>
 
+/* disable specific gcc warnings */
+#ifdef __GNUC__
+#pragma GCC diagnostic ignored "-Wsign-conversion"
+#pragma GCC diagnostic ignored "-Wmissing-declarations"
+#endif
+
+
 #if SPDLOG_ACTIVE_LEVEL != SPDLOG_LEVEL_OFF
 static auto logger = Logger::getInstance().make_logger("posix_operations");
 #endif // SPDLOG_ACTIVE_LEVEL |= SPD_LEVEL_OFF
