@@ -1,7 +1,6 @@
 #pragma once
 
 #include <cstdio>
-#include <caju/hierarchy/tiers/storage_driver_interface.h>
 
 class StorageDriver;
 

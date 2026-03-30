@@ -41,15 +41,19 @@ std::unique_ptr<FileId> NeighboringNodeStorageTier::open(const char* path, int f
 }
 
 std::unique_ptr<FileId> NeighboringNodeStorageTier::open64(const char* path, int flags) {
+    return 0;
 }
 
 std::unique_ptr<FileId> NeighboringNodeStorageTier::open64(const char* path, int flags, mode_t mode) {
+    return 0;
 }
 
 std::unique_ptr<FileId> NeighboringNodeStorageTier::fopen(const char* pathname, const char* mode) {
+    return 0;
 }
 
 std::unique_ptr<FileId> NeighboringNodeStorageTier::fopen64(const char* pathname, const char* mode) {
+    return 0;
 }
 
 ssize_t NeighboringNodeStorageTier::read(void* buf, size_t count, FileId& file_id) {
@@ -100,12 +104,15 @@ ssize_t NeighboringNodeStorageTier::write(const void* buf, size_t count, FileId&
 }
 
 ssize_t NeighboringNodeStorageTier::writev(const struct iovec* iov, int iovcnt, FileId& file_id) {
+    return 0;
 }
 
 size_t NeighboringNodeStorageTier::fread(void* ptr, size_t size, size_t nmemb, FileId& file_id) {
+    return 0;
 }
 
 size_t NeighboringNodeStorageTier::fwrite(const void* ptr, size_t size, size_t nmemb, FileId& file_id) {
+    return 0;
 }
 
 int NeighboringNodeStorageTier::close(FileId& file_id) {
@@ -123,4 +130,5 @@ int NeighboringNodeStorageTier::close(FileId& file_id) {
 }
 
 int NeighboringNodeStorageTier::fclose(FileId& file_id) {
+    return 0;
 }
