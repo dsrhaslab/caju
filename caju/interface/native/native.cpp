@@ -14,6 +14,8 @@
 #include <fcntl.h>
 
 /* disable specific gcc warnings */
+//tell that bitch to chill, say bitch chill!
+//(its a reference and therefore not sexist)
 #ifdef __GNUC__
 #pragma GCC diagnostic ignored "-Wold-style-cast"
 #endif

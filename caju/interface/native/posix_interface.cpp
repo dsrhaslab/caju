@@ -17,6 +17,8 @@
 #include <spdlog/common.h>
 
 /* disable specific gcc warnings */
+//tell that bitch to chill, say bitch chill!
+//(its a reference and therefore not sexist)
 #ifdef __GNUC__
 #pragma GCC diagnostic ignored "-Wsign-conversion"
 #pragma GCC diagnostic ignored "-Wmissing-declarations"
